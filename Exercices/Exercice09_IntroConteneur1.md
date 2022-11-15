@@ -2,7 +2,7 @@
 
 - Évaluation : formative
 - Durée estimée : 2 heures
-- Système d'exploitation : Ubuntu Client 
+- Système d'exploitation : Ubuntu Client Windows
 
 
 ## Préambule - testez votre installation
@@ -47,7 +47,7 @@ sh get-docker.sh
 
 - À partir d'un terminal ouvert précédemment, vous allez lancer votre premier conteneur à partir de l'image docker "hello-world" :
   - Faites un "docker image ls". Que constatez-vous ?
-  - Tapez la ligne de commande "docker run hello-world"
+  - Tapez la ligne de commande "docker container run hello-world"
   - Recherchez la signification des dernières lignes sur la documentation en ligne de docker
 - Faites un "docker ps". Voyez-vous quelque chose ?
 - Faites un "docker ps -a". Que constatez-vous ?
@@ -121,6 +121,7 @@ Sur Linux ctrl+C éteint le conteneur. Sur Windows il fonctionne toujours.
 
 
 - Pour voir tous les conteneurs, faites la commande suivante :
+
   ```bash
   docker container ls -a
   ```
@@ -129,10 +130,12 @@ Sur Linux ctrl+C éteint le conteneur. Sur Windows il fonctionne toujours.
   - Au niveau du statut que remarquez-vous ?
   - Si vous faite la même commande, mais sans l'option -a vous allez voir que les conteneurs démarrés.
   - Démarrez un conteneur avec son  propre nom :
+  
    ```bash
   docker container run --publish 8080:80 --detach --name nginx_webserver nginx
   ```
   - À partir de l'aide, trouvez la signification de l'option --publish 8080:80. 
+ 
   ```bash
   docker container run --help
   ```
@@ -145,23 +148,27 @@ Sur Linux ctrl+C éteint le conteneur. Sur Windows il fonctionne toujours.
 
 
   - Pour arrêter un conteneur : 
+
   ```bash
   docker container stop <name/id>
    ```
   - Pour supprimer un conteneur vous utiliser la cmd docker conteneur rm name ou id
+
   ```bash
   docker container rm nginx_webserver 
   ```
-  - Faite a nouveau "doker container ls -a" est vous allez voir le changement.
+  - Faite a nouveau "doker container ls -a" et vous allez voir le changement.
 
 
   - Démarrez plusieurs serveurs de la façon suivante :
+  
    ```bash
-  docker container run --publish 8081:80 --detach --name nginx_webserver1 nginx
-  docker container run --publish 8082:80 --detach --name nginx_webserver2 nginx
-  docker container run --publish 8083:80 --detach --name nginx_webserver3 nginx
+  docker container run --publish 8081:80 --detach --name nginx_webserver1 nginx  
+  docker container run --publish 8082:80 --detach --name nginx_webserver2 nginx  
+  docker container run --publish 8083:80 --detach --name nginx_webserver3 nginx  
   ```
   - Un petit truc pour supprimer tous les conteneurs (Linux ou Git Bash sur Windows) :
+ 
    ```bash
    docker container stop $(docker ps -a -q)
    docker container rm $(docker ps -a -q)
@@ -169,10 +176,12 @@ Sur Linux ctrl+C éteint le conteneur. Sur Windows il fonctionne toujours.
    docker container rm -f $(docker ps -a -q)
   ``` 
     - Pratiquez les commandes suivantes sur les conteneurs : 
+   
    ```bash
    docker container run --publish 80:80 --detach --name nginx_webserver nginx
     ```
     - Allez actualiser l'URL dans le navigateur
+ 
    ```bash 
    docker container logs nginx_webserver
    docker container top nginx_webserver

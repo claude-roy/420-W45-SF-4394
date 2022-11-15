@@ -34,6 +34,10 @@ int main(int argc, char** argv) {
 - Tapez la commande ```docker build --tag premier-programme:latest .```
 - Vérifiez que l'image a bien été créée
 - Lancez un conteneur qui utilise votre image
+
+```bash
+docker container run --rm premier-programme
+```
 - Modifiez le programme précédent pour qu'il corresponde au listage suivant :
 
 ```cpp
@@ -67,52 +71,64 @@ apt install g++
 
 </details>
 
-## Exercice 2 - Programme C#
+## Exercice 2 - Créer une image à partir d'une autre image
+Une image est construite à partir d’un fichier <code>Dockerfile</code> : si vous voulez utiliser un autre nom de fichier, vous devez utiliser la commande :
 
-- À partir d'un terminal, placez-vous dans un nouveau répertoire "premier-conteneur-csharp"
-- À partir du programme dotnet, créez un projet .Net core de type console
-- Testez manuellement votre programme
-
-<details>
-    <summary>Installation dotnet, création et compilation du programme en local</summary>
-
-```bash   
-wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-sudo dpkg -i packages-microsoft-prod.deb
-rm packages-microsoft-prod.deb
-sudo apt-get update; \
-  sudo apt-get install -y apt-transport-https && \
-  sudo apt-get update && \
-  sudo apt-get install -y dotnet-sdk-6.0
-    
-dotnet new console -o premier-conteneur-csharp
-cd premier-conteneur-csharp
-dotnet run
+```bash
+docker build -f un_fichier_dockerfile
 ```
 
-</details>
+- Consultez le Dockerfile de nginx : <https://github.com/nginxinc/docker-nginx/blob/ef8e9912a2de9b51ce9d1f79a5c047eb48b05fc1/mainline/debian/Dockerfile>
+- Consultez le site <https://docs.docker.com/engine/reference/builder/> pour comprendre les commandes <code>FROM, ENV, RUN, EXPOSE, CMD</code>. Vous pouvez constater que nginx s'exécute à partir d'une image Debian minimale. 
+- Créez un répertoire de travail : par exemple <code>Docker</code>.
+- Dézipper le fichier <code>dockerfile-exemple.zip</code> dans votre répertoire de travail.
+- Allez dans le répertoire <code>dockerfile-exemple</code>. Ouvrez le fichier <code>Dockerfile</code>. Le fichier <code>index.html</code> va nous servir « d’application » à intégrer dans notre serveur nginx.
+- Voici ce que fait le <code>Dockerfile</code> :
+	- Nous allons utiliser une image officielle (la commande <code>FROM</code>). On peut utiliser une image officielle comme image de départ, c’est même recommandé et ça rend notre tâche beaucoup plus simple.
+	- Par la suite, nous allons nous placer dans le répertoire <code>/usr/share/nginx/html</code> (la commande <code>WORKDIR</code>, nous aurions également pu utiliser la commande <code>RUN</code> avec <code>cd</code>).
+	- Finalement, nous allons copier le fichier <code>index.html</code> de notre répertoire hôte dans le répertoire <code>/usr/share/nginx/html</code> de notre conteneur : on n’inclut pas le chemin (path), car nous sommes déjà dans le répertoire.
+	- On n'a pas à spécifier <code>EXPOSE</code> pour les ports ou <code>CMD</code> car ils sont dans l'image initiale incluse avec la commande notre commande <code>FROM</code>. De là l’avantage d’utiliser une image existante.
+- Exécutez la commande pour construire votre image et exécuter un conteneur (le <code>-t</code> ajoute un tag à notre image, il y a un point à la fin).
 
-- Pour compiler votre programme, nous allons utiliser ici une image docker contenant le SDK de dotnet 6.0 Nous allons ensuite copier le résultat dans une nouvelle image qui ne contient que l'environnement d'exécution de dotnet 6.0 Pour cela, placez-vous dans le répertoire du projet et créez le fichier Dockerfile suivant :
+```bash
+docker image build -t monimage .
+docker container run -p 8080:80 --rm monimage
+```
+- Ouvrez un navigateur à localhost:8080.
+- Votre fichier index s’affiche-t-il ? (Si vous avez la page de nginx, vous pouvez essayer de rafraichir la page ou de vider l'historique de votre navigateur).  
+- Faites la commande <code>Ctrl-c</code> pour arrêter votre conteneur.
+- Vérifier les images de votre hôte pour voir que votre nouvelle image s’y trouve.
 
-```Dockerfile
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-WORKDIR /source
+## Exercice 3 - Un peu de nettoyage
+Les images et les conteneurs que vous utilisez prennent de l’espace sur votre disque, il faut donc quelques fois faire un peu de ménage.  
+Vous pouvez utiliser les commandes <code>prune</code> pour nettoyer les images, les volumes, les espaces tampons et les conteneurs.  
+Par exemple, pour nettoyer les images « pendantes » :
 
-COPY . .
-RUN dotnet publish -c release -o /app
+```bash
+docker image prune
+```
+Ou, pour tout nettoyer :
 
-FROM mcr.microsoft.com/dotnet/runtime:6.0
-WORKDIR /app
-COPY --from=build /app .
-ENTRYPOINT ["./premier-conteneur-csharp"]
+```bash
+docker system prune  
 ```
 
-- Créez l'image docker "premier-programme-csharp"
-- Testez votre image
-- Essayez de comprendre les lignes du fichier Dockerfile en cherchant dans la documentation
+Pour nettoyer toutes les images non utilisées :
+```bash
+docker image prune -a
+```
+
+- Nettoyez les images non utilisées de votre système (n'oubliez pas vos captures d'écran pour vérification avant).
+- Utilisez la commande suivante pour voir l'utilisation de l'espace par Docker :
+
+```bash
+docker system df
+```
+
+N'oubliez pas que chacune de ces commandes a des options que vous découvrez avec <code>--help</code>.  
+Par contre, ayant un compte Docker gratuit vous êtes limité au nombre de téléchargement d’images que vous pouvez faire en 6 heures : <https://docs.docker.com/docker-hub/download-rate-limit/>. Vous devez donc bien balancer la gestion de votre espace local et le téléchargement de nouvelles images.
 
 
 ## Pour vérification
 Remettre une capture d’écran de la création et du test de l'image dans l'espace travaux, exercice 10 sur LÉA.
 N'oubliez pas, je dois pouvoir identifier votre VMs.
-
