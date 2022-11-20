@@ -1,4 +1,4 @@
-﻿# Exercice 12 - Docker  : volume et redirection de port
+# Exercice 12 - Docker  : volume et redirection de port
 
 - Évaluation : formative
 - Durée estimée : 4 heures
@@ -11,24 +11,30 @@ Note : créez répertoire Exercice12 puis un répertoire par exercice.
 ### Exercice 1.1 - Réseau par défaut (bridge)
 
 - Ouvrez deux terminaux, powershell ou bash, et sur chacun, lancez un conteneur de l'image "busybox" en mode intéractif.
+
+```bash
+docker container run -it busy1 busybox
+```
+
 - Trouvez l'adresse IP de chaque conteneur
-- Effectuez une requête ICMP d'un conteneur vers l'autre. Qu'observez-vous ?
-- Essayez de faire une requête ICMP vers "www.google.com". Qu'observez-vous ?
+- Effectuez une requête ICMP echo request (ping) d'un conteneur vers l'autre. Qu'observez-vous ?
+- Essayez de faire une requête ICMP echo request vers "www.google.com". Qu'observez-vous ?
 - Quittez les conteneurs
-- Nettoyez vos conteneurs en supprimant ceux créés dans cet exercice.
+- Nettoyez vos conteneurs en supprimant ceux créés dans cete partie.
 
 ### Exercice 1.2 - Réseau none
 
-- Lancez un conteneur de l'image "busybox" avec l'option "--network none"
+- Lancez un conteneur en mode intérectif de l'image "busybox" avec l'option "<code>--network none</code>"
 - Essayez de déduire l'adresse IP du conteneur. Qu'observez-vous ?
-- Essayez de faire une requête ICMP vers "www.google.com". Qu'observez-vous ?
-- Nettoyez vos conteneurs en supprimant ceux créés dans cet exercice.
+- Essayez de faire une requête ICMP echo request vers "www.google.com". Qu'observez-vous ?
+- Nettoyez votre conteneur en supprimant celui créé dans cette partie.
 
 ### Exercice 1.3 - Réseau host ([Linux seulement](https://docs.docker.com/network/host/))
 
 - Lancez un conteneur de l'image "busybox" avec l'option "--network host"
 - Essayez de déduire l'adresse IP du conteneur. Qu'observez-vous ?
-- Nettoyez vos conteneurs en supprimant ceux créés dans cet exercice.
+- Essayez de faire une requête ICMP echo request vers "www.google.com". Qu'observez-vous ?
+- Nettoyez votre conteneur en supprimant celui créé dans cette partie.
 
 ## Exercie 2 - Nginx - réseau
 
@@ -36,35 +42,37 @@ Dans cet exercice, vous allez devoir utiliser l'image "nginx" afin de créer un 
 
 ### Exercice 2.1 - Nginx - premiers tests
 
-- Sur un premier terminal, lancez en arrière plan (-d) l'image "nginx" sans spécifier de redirection de port avec le nom "mon_nginx" (--name)
-- Faite un "docker inspect mon_nginx" afin de trouver l'adresse du conteneur
-- Sur un autre terminal, lancez l'image "browsh/browsh" en mode intéractif (-it) ([Documentation browsh/browsh](https://hub.docker.com/r/browsh/browsh)).
-- Faites un "Ctrl-l" et tapez l'adresse IP de votre serveur web. Le site par défaut d'Nginx devrait s'afficher. Pour quitter faites un "Ctrl-q" (pour les autres commandes faites un "F1").
+- Sur un premier terminal, lancez en arrière plan (<code>-d</code>) l'image "nginx" sans spécifier de redirection de port avec le nom "mon_nginx" (<code>--name</code>)
+- Faite la commande <code>docker container inspect mon_nginx</code> afin de trouver l'adresse du conteneur
+- Sur un autre terminal, lancez l'image "browsh/browsh" en mode intéractif (<code>-it</code>) ([Documentation browsh/browsh](https://hub.docker.com/r/browsh/browsh)).
+- Faites un <code>Ctrl-l</code> et tapez l'adresse IP de votre serveur web. Le site par défaut d'Nginx devrait s'afficher. Pour quitter faites <code>Ctrl-q</code> (pour les autres commandes faites <code>F1</code>).
 - À partir de votre navigateur favori, essayer de naviguer l'adresse IP que vous aviez. Essayez avec l'adresse locale.
 - Qu'observez-vous et pourquoi ?
-- Nettoyez vos conteneurs en supprimant ceux créés dans cet exercice.
+- Nettoyez vos conteneurs en supprimant ceux créés dans cette partie.
 
 ### Exercice 2.2 - Nginx - liaison
 
 - Recréé un conteneur, mais cette fois-ci, faites une liaison entre le port 1234 de l'hôte vers le port 80 du conteneur.
-- Refaites les tests de l'exercice précédent
-- Nettoyez vos conteneurs en supprimant ceux créés dans cet exercice.
+- Refaites les tests de la partie précédente (utiliser http://localhost:1234 pour le navigateur local).
+- Nettoyez vos conteneurs en supprimant ceux créés dans cette partie.
 
 ## Exercice 3 - Ngnix - volume
 
 - Créez vous un répertoire temporaire et créez un fichier "index.html". Dans ce fichier, écrivez un code html simple afin d'afficher "Un fichier de mon hôte servi à partir d'un conteneur"
-- Par défaut, l'image "Nginx" utilise le répertoire "/usr/share/nginx/html" comme base de recherche de ses fichiers statiques. Vous allez devoir faire un montage afin que votre répertoire soit monté vers ce chemin au moment du démarrage du conteneur
+- Par défaut, l'image "Nginx" utilise le répertoire <code>/usr/share/nginx/html</code> comme base de recherche de ses fichiers statiques. Vous allez devoir créer un point de montage (bind mount) afin que votre répertoire soit monté vers ce chemin au moment du démarrage du conteneur (consultez la partie "Hosting some simple static content" de la documentation [Documentation Nginx](https://hub.docker.com/_/nginx)). Vous devez également faire une liaison entre le port 1234 de l'hôte vers le port 80 du conteneur.
+	- Pour spécifier le chemin (path) de l’hôte, nous pouvons écrire le chemin complet ou nous pouvons utiliser la variable shell <code>$(pwd)</code>.
+	- Remarque : pour PowerShell utiliser <code>${pwd}</code> et pour cmd.exe utiliser <code>%cd%</code>.
 - Validez que vous voyez bien votre page
-- Supprimez votre conteneur et lancez en un nouveau en faisant maintenant un montage en lecture seule (:ro : voir documentation)
+- Supprimez votre conteneur et lancez en un nouveau en faisant maintenant un montage en lecture seule (<code>:ro</code> voir la documentation de nginx)
 - Validez que le tout fonctionne toujours
-- Nettoyez vos conteneurs en supprimant ceux créés dans cet exercice.
+- Nettoyez vos conteneurs en supprimant celui créé dans cette partie.
 
 ## Exercice 4 - Application MVC core
 
 ### Exercice 4.1 - Création d'un projet MVC en .Net core
 
 - Au besoins, procéder à l'installation : 
-Installing .NET 6 on Ubuntu 22.04 (Jammy) https://github.com/dotnet/core/issues/7699
+[Installing .NET 6 on Ubuntu 22.04 (Jammy)] (https://github.com/dotnet/core/issues/7699)
 
 
 - À partir d'un terminal et de la commande dotnet, créez une application :
@@ -111,35 +119,43 @@ COPY --from=build-env /app/out .
 ENTRYPOINT ["dotnet", "webapp.dll"]
 ```
 
-- Assurez-vous de bien comprendre chaque ligne du fichier Dockerfile
-- Construisez l'image "<votre_docker_id>/webapp" avec la version "latest"
+- Assurez-vous de bien comprendre chaque ligne du fichier Dockerfile.
+- Construisez l'image "votreDockerId/webapp" avec la version "latest"
 
 ```bash 
-docker build --tag [votre_docker_id]/webapp:latest .
+docker build --tag votreDockerId/webapp:latest .
+docker image ls
 ```
-- Exécutez un conteneur à partir de cette image en liant le port 80 du conteneur au port 5000 de l'hôte
-- Validez que le tout fonctionne (attention vous allez être en http)
+- Exécutez un conteneur à partir de cette image (vous devez spécifier votreDockerId/webapp pour votre image) en liant le port 80 du conteneur au port 5000 de l'hôte.
+- Validez que le tout fonctionne (attention vous allez être en http).
 
 ### Exercice 4.3 - Publication
 
-- Sur un terminal faites un "docker login" et tapez vos informations de connexion
-- Faites un "docker push <votre_docker_id>/webapp:latest". La première fois que vous allez effectuer cette commande, il va vous demander vos informations de connexion.
+- Sur un terminal exécuter la commande <code>docker login</code> et tapez vos informations de connexion.
+- Exécutez la commande <code>docker push votreDockerId/webapp:latest</code>. La première fois que vous allez effectuer cette commande, si ce n'est pas déjà fait, il va vous demander vos informations de connexion.
 - Allez dans votre compte sur docker hub et validez que votre image est bien présente.
-- Supprimez votre version locale
-- Démarrez un conteneur à partir de l'image qui est sur docker hub et validez que tout fonctionne
-- Demandez le nom de l'image d'un de vos collègues ou utilisez mon image "jpduches/webapp"
-- Démarrez un conteneur avec cette image et validez que tout fonctionne
-- Nettoyez vos conteneurs en supprimant ceux créés dans cet exercice.
+- Supprimez votre image docker locale.
+- Démarrez un conteneur à partir de l'image qui est sur docker hub et validez que tout fonctionne.
+- Demandez le nom de l'image d'un de vos collègues ou utilisez mon image "jpduches/webapp".
+- Démarrez un conteneur avec cette image et validez que tout fonctionne. Docker devrait télécharger l'image de votre dépôt.
+- Nettoyez vos conteneurs en supprimant ceux créés dans cette partie.
 
 ## Exercice 5 - MySQL
 
 ### Exercice 5.1 - MySQL - Base
 
-- Si ce n'est déjà fait sur votre environnement docker, installez MySQL Workbench (https://dev.mysql.com/downloads/file/?id=497518)
-- Lancez un conteneur à partir de l'image mysql :
+- Si ce n'est déjà fait sur votre environnement docker, installez MySQL Workbench (https://dev.mysql.com/downloads/workbench/, choisir la bonne version pour votre Ubuntu).
+
+```bash
+cd ~/Downloads
+sudo apt install ./mysql-workbench-community_8.0.31-1ubuntu22.04_amd64.deb
+# Il se peut que vous ayez à faire
+sudo apt --fix-broken install
+```
+- Lancez un conteneur à partir de l'image mysql (référence : https://hub.docker.com/_/mysql) :
   - Nom : mysql
   - Spécifiez que le container doit être détaché (-d)
-  - Fournissez la valeur "Passw0rd" pour la variable d'environnement "MYSQL_ROOT_PASSWORD" (Voir utilisation du -e dans la documentation)
+  - Fournissez la valeur "Passw0rd" pour la variable d'environnement "MYSQL\_ROOT\_PASSWORD" (Voir utilisation du -e dans la documentation)
   - Liez le port 3306 local vers le port 3306 du container
 - Avec MySQL Workbench, validez que le tout marche :
   - Connectez-vous
@@ -158,15 +174,15 @@ docker run -d --rm --name mysql -e MYSQL_ROOT_PASSWORD=Passw0rd -p 3306:3306 mys
 
 </details>
 
-### Exercice 5.2 - MySQL - Volume
+### Exercice 5.2 - MySQL - Volume XXX
 
-- Créez vous un répertoire qui va contenir vos données pour MySQL
-- Réutilisez votre ligne de commande pour créer un conteneur MySQL avec les mêmes caractéristiques que précédemment et ajoutez le montage d'un volume qui lie le répertoire de données que vous venez de créer au répertoire "/var/lib/mysql"
+- Créez vous un répertoire qui va contenir vos données pour MySQL.
+- Réutilisez votre ligne de commande pour créer un conteneur MySQL avec les mêmes caractéristiques que précédemment et ajoutez le montage d'un volume qui lie le répertoire de données que vous venez de créer au répertoire "/var/lib/mysql".
 - Avec MySQL Workbench, validez que le tout marche :
-  - Connectez-vous
-  - Créez la base de données "test" (create database test;)
-  - Validez que la base de données est bien existantes (show databases;)
-- Arrêtez et supprimez le conteneur "mysql"
+  - Connectez-vous.
+  - Créez la base de données "test" (create database test;).
+  - Validez que la base de données est bien existantes (show databases;).
+- Arrêtez et supprimez le conteneur "mysql".
 - Recréez un nouveau conteneur mysql et connectez-vous de nouveau à MySQL et listez les bases de données. Que constatez-vous et pourquoi ?
 - Supprimez votre conteneur
 
