@@ -174,7 +174,7 @@ docker run -d --rm --name mysql -e MYSQL_ROOT_PASSWORD=Passw0rd -p 3306:3306 mys
 
 </details>
 
-### Exercice 5.2 - MySQL - Volume XXX
+### Exercice 5.2 - MySQL - Volume
 
 - Créez vous un répertoire qui va contenir vos données pour MySQL.
 - Réutilisez votre ligne de commande pour créer un conteneur MySQL avec les mêmes caractéristiques que précédemment et ajoutez le montage d'un volume qui lie le répertoire de données que vous venez de créer au répertoire "/var/lib/mysql".
@@ -201,18 +201,18 @@ docker run -d --rm --name mysql -e MYSQL_ROOT_PASSWORD=Passw0rd -p 3306:3306 -v 
 
 - Créez-vous un nouveau répertoire pour stocker une autre installation de bases de données
 - Créez un nouveau conteneur avec les options précédentes en modifiant le chemin du montage ainsi qu'en ajoutant les variables d'environnement suivantes :
-  - MYSQL_DATABASE=wordpress
-  - MYSQL_USER=wordpress
-  - MYSQL_ROOT_PASSWORD=Passw0rd
-  - MYSQL_PASSWORD=Passw0rd
+  - MYSQL\_DATABASE=wordpress
+  - MYSQL\_USER=wordpress
+  - MYSQL\_ROOT\_PASSWORD=Passw0rd
+  - MYSQL\_PASSWORD=Passw0rd
 - Avec MySQL Workbench, essayez de vous connecter à la base de données wordpress avec le nom d'utilisateur "wordpress" et le mot de passe "Passw0rd"
 - Cherchez l'adresse IP du conteneur mysql
 - Créez un conteneur à partir de l'image wordpress en liant le port locale 8080 au port 80 et avec les variables d'environnement suivantes :
-  - WORDPRESS_DB_HOST=172.17.0.2
-  - WORDPRESS_DB_USER=wordpress
-  - WORDPRESS_DB_PASSWORD=Passw0rd
-  - WORDPRESS_DB_NAME=wordpress
-  - WORDPRESS_TABLE_PREFIX=wp_
+  - WORDPRESS\_DB_HOST=172.17.0.2
+  - WORDPRESS\_DB\_USER=wordpress
+  - WORDPRESS\_DB\_PASSWORD=Passw0rd
+  - WORDPRESS\_DB\_NAME=wordpress
+  - WORDPRESS\_TABLE\_PREFIX=wp_
 - Testez votre site web et vérifiez que cela fonctionne
 - Que pensez-vous de toutes ces manipulations ?
 
@@ -234,7 +234,8 @@ N'oubliez pas, je dois pouvoir identifier votre VMs.
 
 ### Exercice 6.2 - Wordpress - Un début d'orchestration ?
 
-- Lisez et exécutez les instructions présentes à la page suivante : https://docs.docker.com/compose/wordpress/
+- Lisez et exécutez les instructions présentes à la page suivante : https://github.com/docker/awesome-compose/tree/master/official-documentation-samples/wordpress/
+	- Pour l'arrêter utiliser la commande <code>docker compose down</code>.
 - Quels sont les avantages d'un tel système ?
 
 
