@@ -61,7 +61,7 @@ int main(int argc, char** argv) {
     </details>
 - Reconstruisez votre image de conteneur
 - Essayez de lancer un nouveau conteneur en utilisant les mêmes lignes de commandes que précédemment
-- Essayez de lancer un nouveau conteneur en utilisant en ajoutant à la fin la chaîne de caractères ```"Un paramètre qui vient de l'extérieur du conteneur" ```
+- Essayez de lancer un nouveau conteneur en ajoutant à la fin la chaîne de caractères ```"Un paramètre qui vient de l'extérieur du conteneur" ```
 
     <summary>Installation de g++</summary>
 
