@@ -1,4 +1,48 @@
 #  Exercice 13 :  Démarrez avec Docker Compose 
+
+## Exercice 1 : commandes de base
+
+Dans cette section, vous allez utiliser les fichiers du document exercice13.zip.
+
+À l’aide d’un éditeur de texte (je recommande Visual Studio Code), ouvrer les fichiers dans le répertoire partie1.
+Observer le fichier docker-compose.yml. La partie services décrit les conteneurs que nous allons utiliser.
+Le premier conteneur va se nommer proxy, nous allons utiliser l’image alpine de nginx et le port 80 sera exposé sur l’hôte.
+  proxy:
+    image: nginx:alpine # on utilise la version alpine
+    ports:
+      - '80:80' # expose 80 a hote envoie a 80 au conteneur
+Ici, nous utilisons le paramètre volumes pour faire un bind mount du fichier nginx.conf dans notre hôte au fichier /etc/nginx/conf.d/default.conf dans le conteneur. Le fichier sera en lecture seulement dans le conteneur.
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+Le deuxième conteneur va se nommer serveurweb et nous allons utiliser l’image la plus récente d’Apache.  
+serveurweb:
+    image: httpd  # on utilise httpd:latest
+Observer le fichier nginx.conf. Pouvez-vous trouver à quel endroit on utilise le DNS de Docker pour référencer notre deuxième conteneur (vous n’avez pas à comprendre le fichier nginx.conf) ?
+Avec le paramètre proxy_pass.
+proxy_pass         http://serveurweb;
+b.	Lancer ces conteneurs. Vous devez vous placer dans le répertoire des fichiers pour les lancer (avec Visual Studio, vous pouvez ouvrir un shell dans l’éditeur de texte).
+docker compose up
+Avec cette commande, vous allez lancer vos conteneurs, créer un réseau privé virtuel, bind mount le fichier spécifié, ouvert le port sur l’hôte et envoyer les journaux à l’écran.
+Ouvrez un navigateur et allez à http://localhost. Oui, vous êtes dans le serveur Apache et non nginx. Nginx sert de proxy ici. Si vous consultez vos journaux à la ligne de commande, vous pouvez voir que le proxy est appelé en premier et après le serveurweb.
+Arrêter vos conteneurs.
+Ctrl-c
+c.	Relancer vos conteneurs, mais en arrière-plan et vérifier le fonctionnement avec un navigateur Web.
+docker compose up -d
+Vérifier les commandes disponibles avec docker-compose.
+docker compose --help
+Vous pouvez constater que de nombreuses commandes que vous avez déjà utilisées se retrouvent dans docker compose.
+Consulter les journaux.
+docker compose logs
+Lister les conteneurs qui s’exécutent.
+docker compose ps
+Lister les services qui s’exécutent dans les conteneurs.
+docker compose top
+Finalement, arrêter vos conteneurs.
+docker compose down
+
+
+## Exercice 2 : application complète
+
 Source : [Get started with Docker Compose](https://docs.docker.com/compose/gettingstarted/)
 
 Sur cette page, vous construisez une application web simple en Python  fonctionnant sur Docker Compose. L'application utilise le framework Flask et maintient un compteur de hits dans Redis. Bien que l'exemple utilise Python, les concepts démontrés ici devraient être compréhensibles même si vous n'êtes pas familier avec ce langage.
