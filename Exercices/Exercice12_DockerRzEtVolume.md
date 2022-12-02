@@ -20,11 +20,11 @@ docker container run -it --name busy1 busybox
 - Effectuez une requête ICMP echo request (ping) d'un conteneur vers l'autre. Qu'observez-vous ?
 - Essayez de faire une requête ICMP echo request vers "www.google.com". Qu'observez-vous ?
 - Quittez les conteneurs
-- Nettoyez vos conteneurs en supprimant ceux créés dans cete partie.
+- Nettoyez vos conteneurs en supprimant ceux créés dans cette partie.
 
 ### Exercice 1.2 - Réseau none
 
-- Lancez un conteneur en mode intérectif de l'image "busybox" avec l'option "<code>--network none</code>"
+- Lancez un conteneur en mode intéractif de l'image "busybox" avec l'option "<code>--network none</code>"
 - Essayez de déduire l'adresse IP du conteneur. Qu'observez-vous ?
 - Essayez de faire une requête ICMP echo request vers "www.google.com". Qu'observez-vous ?
 - Nettoyez votre conteneur en supprimant celui créé dans cette partie.
@@ -229,7 +229,7 @@ docker run --rm --name wordpress -d -e WORDPRESS_DB_HOST=172.17.0.2 -e WORDPRESS
 
 
 ## Pour vérification
-Remettre une capture d’écran de votre site WordPress et du ps de votre contenueur dans l'espace travaux, exercice 12 sur LÉA.
+Remettre une capture d’écran de votre site WordPress et du ps de votre conteneur dans l'espace travaux, exercice 12 sur LÉA.
 N'oubliez pas, je dois pouvoir identifier votre VMs.
 
 ### Exercice 6.2 - Wordpress - Un début d'orchestration ?
