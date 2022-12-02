@@ -13,7 +13,7 @@ Note : créez répertoire Exercice12 puis un répertoire par exercice.
 - Ouvrez deux terminaux, powershell ou bash, et sur chacun, lancez un conteneur de l'image "busybox" en mode intéractif.
 
 ```bash
-docker container run -it busy1 busybox
+docker container run -it --name busy1 busybox
 ```
 
 - Trouvez l'adresse IP de chaque conteneur
