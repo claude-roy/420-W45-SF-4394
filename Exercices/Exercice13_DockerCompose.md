@@ -223,7 +223,7 @@ Le service `redis` utilise une image `Redis` publique extraite du registre Docke
 1- Depuis le répertoire de votre projet, démarrez votre application en exécutant `docker compose up`.
 
 ```bash
-docker-compose up
+docker compose up
 ```
 
 Compose extrait une image Redis, construit une image pour votre code et démarre les services que vous avez définis. Dans ce cas, le code est copié statiquement dans l'image au moment de la construction.
