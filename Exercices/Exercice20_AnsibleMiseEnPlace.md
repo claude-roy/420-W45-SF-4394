@@ -133,10 +133,10 @@ ansible 2.9.6
 Ansible utilisera le fichier de configuration situé dans /etc/ansible/ansible.cfg, sauf s'il y a un fichier ansible.cfg dans le répertoire courant. 
 
 
-Pour que Ansible prennent en considération notre répertoire nous allons créer un fichier ansible.cfg à la racine du répertoire usager de deploy :
+Pour que Ansible prennent en considération notre répertoire nous allons créer un fichier ansible.cfg à la racine du répertoire de l'usager deploy :
 
 ```bash
-vi ./ansible.cfg
+vim ~/ansible.cfg
 #contenu du fichier :
 [defaults]
 inventory   = ./inventaire
