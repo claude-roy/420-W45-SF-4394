@@ -263,6 +263,7 @@ ansible -m command -a id all
 
 ## Référence :
 
+[Documentation officielle d'Ansible](https://docs.ansible.com/ansible/latest/getting_started/index.html)  
 [Ansible - Gérez la configuration de vos serveurs et le déploiement de vos applications (2e édition) ](https://www.eni-training.com/portal/client/mediabook/home)
 
 [Github-Ansible](https://github.com/EditionsENI/ansible)
