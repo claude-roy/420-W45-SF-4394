@@ -41,12 +41,12 @@ Il est important d'utiliser un usager différent de votre usager de travail habi
 
 La génération de la clé est déclenchée par la commande ssh-keygen. On peut lui passer les options suivantes :
 
-- Le type de clé à générer (rsa ou dsa) avec -t [rsa|dsa|es].
+- Le type de clé à générer (rsa, dsa ou ed25519) avec -t [rsa|dsa|ed25519].
 L’emplacement où générer la clé avec -f <emplacement-clé>.
 
-- Une passphrase (phrase secrète) pour protéger la clé avec l’option -N.
+- Une passphrase (phrase secrète) pour protéger la clé avec l’option -N. Vous pouvez mettre la valeur "" pour ne pas utiliser de passphrase.
 
-- Éventuellement la longueur de la clé (-b 2048 pour une clé de 2 048 bits).
+- Éventuellement la longueur de la clé (-b 2048 pour une clé de 2 048 bits, les clés Ed25519 et Ed25519-SK ont une longueur fixe et l'indicateur -b sera ignoré).
 
 Si vous ne passez pas de paramètres à la commande, ssh-keygen produira une clé RSA et la commande demandera les choses suivantes :
 - l’emplacement de la clé (par défaut $HOME/.ssh/id_rsa) ;
@@ -61,7 +61,7 @@ Pour travailler avec Ansible, il est important de comprendre comment fonctionne 
 
 - Vérification de la signature du serveur distant. Si ce dernier n’est pas connu, l’utilitaire ssh proposera de stocker la chaîne présentée par le serveur.
 
-- Récupération des clés privées SSH présentes dans le répertoire .ssh (fichiers id_rsa ou id_dsa) de l’utilisateur et vérification des droits sur les fichiers.
+- Récupération des clés privées SSH présentes dans le répertoire .ssh (fichiers id_rsa, id_dsa ou id_ed25519) de l’utilisateur et vérification des droits sur les fichiers.
 
 - Présentation des clés aux serveurs distants. Si une clé correspond à une entrée dans le fichier ~/.ssh/authorized_keys distant, le serveur crée un challenge à résoudre par le client.
 - Le client résout le challenge (c’est d’ailleurs à ce moment qu’il faut saisir la passphrase de la clé SSH si vous l'avez configurée) et le renvoie au serveur : l’utilisateur est authentifié.
@@ -97,16 +97,28 @@ L’installation d’Ansible peut se faire de plusieurs manières
 - par l’utilisation des archives contenant le code source d’Ansible ;
 - ou enfin, en interprétant directement le code source en provenance de Git.
 
-Nous allons opter pour les packages système : 
+Nous allons opter pour les packages système.  
+Depuis votre nœud de contrôle, exécutez la commande suivante pour inclure le PPA (personal package archive) du projet officiel dans la liste des sources de votre système :
+
 ```bash
-sudo apt intall ansible
+sudo apt-add-repository ppa:ansible/ansible
 ```
+
+Puis, l'installation :
+
+```bash
+sudo apt update && sudo apt intall ansible -y
+```
+
 Vérification de la version d’Ansible
+
 
 ```bash
 ansible --version
 ```
+
 Ci-dessous un exemple de sortie de cette commande (ici avec la version 2.9.6) :
+
 ```bash
 ansible 2.9.6
   config file = /etc/ansible/ansible.cfg
