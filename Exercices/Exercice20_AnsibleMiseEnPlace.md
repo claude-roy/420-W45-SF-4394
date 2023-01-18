@@ -15,21 +15,21 @@ Voici ce qu'en dit la documentation sur Ansible :
 
 Nous aurons besoin de deux VMs, votre Ubuntu client déjà utilisé dans les cours précédents. Appellé ici station de gestion et une machine supplémentaire que nous appellerons srv-apache-[matricule]. Cette dernière représente une machine qui servira pour réaliser les différents tests. 
 
-Dans cette exercice, nous allons travailler essentiellement sur la station de gestion.
+Dans cet exercice, nous allons travailler essentiellement sur la station de gestion.
 
 
 
 ## Protocole SSH 
 Ansible est principalement conçu pour gérer des machines à l’aide du protocole SSH ou via des commandes lancées en local. Il est également possible de gérer d’autres types de machines, comme des systèmes Windows, des conteneurs Docker ou encore via des mécanismes d’isolation (chroot ou jail).
 
-Même s’il est possible de passer par des mots de passe pour se connecter aux machines Linux, il est fortement recommandé de passer par des clés SSH. La suite sera consacrée à la génération des clés SSH. Dans l'exerice suivant vous allez procéder à leur propagation sur les machines à administrer.
+Même s’il est possible de passer par des mots de passe pour se connecter aux machines Linux, il est fortement recommandé de passer par des clés SSH. La suite sera consacrée à la génération des clés SSH. Dans l'exercice suivant, vous allez procéder à leur propagation sur les machines à administrer.
 
 ### Génération de la clé 
 
 
 Les connexions SSH se feront avec l’utilisateur *deploy*. Il faut donc créer cet utilisateur sur la station de gestion, créer sa clé et échanger la clé sur les noeuds que nous voulons gérer, dans notre cas srv-apache-matricule
 
-Il est important d'utiliser un usager différent de votre usager de travail habituelle. Ce nouvelle usager doit pouvoir avoir les droits sudo pour exécuté les commandes sur la machine de contrôle mais il devra également exister sur chacun des noeuds gérés.
+Il est important d'utiliser un usager différent de votre usager de travail habituel. Ce nouvel usager doit pouvoir avoir les droits sudo pour exécuter les commandes sur la machine de contrôle, mais il devra également exister sur chacun des noeuds gérés.
 
 
 ```bash
@@ -133,7 +133,7 @@ ansible 2.9.6
 Ansible utilisera le fichier de configuration situé dans /etc/ansible/ansible.cfg, sauf s'il y a un fichier ansible.cfg dans le répertoire courant. 
 
 
-Pour que Ansible prennent en considération notre répertoire nous allons créer un fichier ansible.cfg à la racine du répertoire de l'usager deploy :
+Pour que Ansible prenne en considération notre répertoire, nous allons créer un fichier ansible.cfg à la racine du répertoire de l'usager deploy :
 
 ```bash
 vim ~/ansible.cfg
@@ -141,26 +141,38 @@ vim ~/ansible.cfg
 [defaults]
 inventory   = ./inventaire
 remote_user = deploy
+retry_files_enabled = False
+host_key_check = False
 log_path    = ./.traces_d_ansible
 ```
-- Pour tester les modifications, appellez à nouveau la commande ansible version:
+
+Ansible recherche un fichier de configuration dans cet ordre :
+
+1. La variable d'environnement <code>ANSIBLE_CONFIG</code>.
+2. Le fichier <code>ansible.cfg</code> dans le répertoire actuel.
+3. Le fichier <code>~/.ansible.cfg</code> dans le répertoire <code>home</code> de l'usager.
+4. <code>/etc/ansible/ansible.cfg</code>
+
+- Pour tester les modifications, appelez à nouveau la commande ansible version:
 
 ```bash
 ansible --version
 ```
 
-Voici le résultat anttendu : 
+Voici le résultat attendu : 
 
 ![Ansible version](img/AnsibleVersion2.png)
 
 
-## Premiére utilisation 
+## Première utilisation 
 
 La syntaxe de base d'Ansible est la suivante :
+
 ```
 ansible [-m module] [-a arguments] cible
 ```
-Exemple avec le module setup qui se connecte sur la machine et vas chercher tous les informations de configuration :
+
+Exemple avec le module setup qui se connecte sur la machine et va chercher toutes les informations de configuration :
 
 ```bash
 ansible -m setup localhost > localhost.setup 
@@ -181,8 +193,8 @@ DFC DS -> VM DFC -> Modeles -> Production -> TPL_20210422_Ub2004Cli
     
 - Après votre connexion, changer les informations suivantes 
 
-    - Nom de la machine (fichier /etc/hostname ) :srv-apache-1
-    - Renseignez le fichier /etc/hosts pour qu'il prenne en considération la modification.
+    - Nom de la machine (<code>sudo hostnamectl set-hostname srv-apache-1</code> ) : srv-apache-1
+    - Renseignez le fichier <code>/etc/hosts</code> pour qu'il prenne en considération la modification.
 
     - Créer un compte : deploy  avec le même mot de passe que sur votre machine de gestion
     - Membre des groupes sudo et admin
@@ -199,13 +211,19 @@ DFC DS -> VM DFC -> Modeles -> Production -> TPL_20210422_Ub2004Cli
         sudo systemctl enable ssh --now
         sudo systemctl start ssh
 
-- Dans votre machine de gestion, ajouter à votre fichier /etc/hosts l'adresse ip et le nom de votre srv-apache-1.
-
 
 ## Échange de clé par mot de passe
 Dans la suite de l’exercice, les connexions SSH se feront avec l’utilisateur deploy.  
 Par la suite, la machine rec-apache-1 sera administrée par clé SSH et vous disposerez du mot de passe de l’utilisateur root. Par conséquent, l’échange de clé se fera avec l’outil ssh-copy-id suivi du nom de la machine. Cet outil a pour fonction de prendre la clé publique SSH pour la déposer automatiquement sur la machine distante dans le fichier ~/.ssh/authorized_keys.
-Il est également possible de faire précéder le nom de l’utilisateur avec lequel se connecter en utilisant une arobase (‘@’). Ci-dessous un exemple d’échange de clé avec l’utilisateur de la machine rec-apache-1 :
+Il est également possible de faire précéder le nom de l’utilisateur avec lequel se connecter en utilisant une arobase (‘@’).  
+
+Si vous utilisez un chiffrement autre que RSA, vous devez l'indiquer avec le paramètre <code>-i</code>. Voici un exemple :
+
+```bash
+ssh-copy-id -i ~/.ssh/id_ed25519 deploy@10.100.2.121
+```
+
+Ci-dessous un exemple d’échange de clé avec l’utilisateur de la machine rec-apache-1 :
 
 ![Image](img/CopySshKey.PNG)
 
@@ -214,37 +232,41 @@ La clé est maintenant en place. Comme le message vous y invite, il est maintena
 
 ![Image](img/verificationCopySshKey.png)
 
-L’échange de clé est effectué, il est maintenant possible de réaliser les premiers tests avec Ansible. Mais avant tous il faut renseignier l'inventaire d'Ansible sur la machine de gestion.
+L’échange de clé est effectué, il est maintenant possible de réaliser les premiers tests avec Ansible. Mais avant tous il faut renseigner l'inventaire d'Ansible sur la machine de gestion.
 
 # Modifier le fichier d'inventaire 
 
-Ansible utilise un fichier d'inventaire appelé hosts qui contient des informations sur l'appareil utilisées par les playbooks Ansible. L'emplacement par défaut du fichier d'inventaire Ansible est /etc/ansible/hosts comme spécifié dans le fichier ansible.cfg par défaut dans le même répertoire /etc/ansible. Ces fichiers par défaut sont utilisés lorsque Ansible est exécuté globalement. Cependant, pour des raison de facilité et de sécurité, vous allez exécuter Ansible à partir du répertoire de l'usager deploy, créé prédédament,  qui est membre du groupe sudo.
+Ansible utilise un fichier d'inventaire appelé hosts qui contient des informations sur l'appareil utilisé par les playbooks Ansible. L'emplacement par défaut du fichier d'inventaire Ansible est /etc/ansible/hosts comme spécifié dans le fichier ansible.cfg par défaut dans le même répertoire /etc/ansible. Ces fichiers par défaut sont utilisés lorsque Ansible est exécuté globalement. Cependant, pour des raisons de facilité et de sécurité, vous allez exécuter Ansible à partir du répertoire de l'usager deploy, créé prédédament, qui est membre du groupe sudo.
 
-Le fichier d'inventaire Ansible définit les périphériques et groupes d'appareils utilisés par le playbook Ansible. Le fichier peut être dans l'un des nombreux formats, y compris YAML et INI, en fonction de votre environnement Ansible. Le fichier d'inventaire peut répertorier les périphériques par adresse IP ou par nom de domaine complet (FQDN), et peut également inclure des paramètres spécifiques à l'hôte.
+Le fichier d'inventaire Ansible définit les périphériques et groupes d'appareils utilisés par le playbook Ansible. Le fichier peut être dans l'un des nombreux formats, y compris YAML et INI, en fonction de votre environnement Ansible (le défaut est INI). Le fichier d'inventaire peut répertorier les périphériques par adresse IP ou par nom de domaine complet (FQDN), et peut également inclure des paramètres spécifiques à l'hôte. Il est également possible de créer des groupes d'hôtes.
 
 
 
-- Avec votre éditeur, créé un fichier d'inventaire avec les informations suivante :
+- Avec votre éditeur, créer un fichier d'inventaire avec les informations suivantes :
+
 ```bash
-vi ./inventaire
+vim ./inventaire
 
 # Contenu du fichier
 
+[Web]
+srv-apache-1 ansible_host=X.X.X.X # L'adresse IP de votre serveur
+
+[local]
 localhost # Station de gestion 
 
-[Web]
-srv-apache-1
-
 ```
-Sauvergarder vos modification et sortez de l'éditeur
+
+Sauvegarder vos modification et sortez de l'éditeur.  
+Au lieu d'utiliser le paramètre <code>ansible_host</code>, vous pourriez ajouter à votre fichier <code>/etc/hosts</code> l'adresse IP et le nom de votre srv-apache-1.
 
 
 
 Pour tester l'inventaire , vous pouvez appeler la commande ansible avec les options suivantes :
 
 - le module ping (-m ping) ;
-- le fichier inventaire (-i srv-apache-1.inv) ;
-- le groupe sur lequel vous souhaitez travailler (ici all pour désigner toutes les machines).
+- le groupe sur lequel vous souhaitez travailler (ici Web ou all pour désigner toutes les machines).
+
 ```bash
 ansible -m ping Web
 # Ping sur tous les membres du groupe Web
@@ -254,17 +276,31 @@ Si la communication se passe bien, vous devriez obtenir le message suivant :
 
 ![images](img/Ansiblecmd1.PNG)
 
-Testons l'ensemble de l'inventaire (All) et pas seulement le groupe Web et ce avec un commande id, module command argument -a id :
+Vous pourriez utiliser un fichier d'inventaire différent avec le paramètre <code>-i</code> : par exemple <code>-i srv-apache-1.inv</code>.
+
+Testons l'ensemble de l'inventaire (All) et pas seulement le groupe Web et ce avec la commande <code>id</code> sur chacun des hôtes. Nous utilisons le module <code>command</code> avec l'argument <code>-a id</code> :
+
 ```
 ansible -m command -a id all
 ```
-qui vas nous renvoyer les informations suivantes :
+qui va nous renvoyer les informations suivantes :
 
 ![images](img/Ansiblecmd2.PNG)
 
+Vous pouvez essayer les commandes suivantes :
+
+```bash
+ansible --list-hosts all
+ansible --list-hosts Web:local
+ansible -m shell -a "hostnamectl" Web
+# La commande suivante a le même résultat que la précédente.
+ansible -m shell -a "hostnamectl" \!local
+
+```
+
 ## Défis et remise: 
 
-Expliquer pourquoi Ansible ne peux se connecter sur localhost. Est-t-il possible de changer ça 
+Expliquer pourquoi Ansible ne peut se connecter sur localhost. Est-il possible de changer ça ?  
 
 
 Remettez sur LÉA votre réponse avec une capture de la commande :
@@ -276,6 +312,7 @@ ansible -m command -a id all
 ## Référence :
 
 [Documentation officielle d'Ansible](https://docs.ansible.com/ansible/latest/getting_started/index.html)  
+
 [Ansible - Gérez la configuration de vos serveurs et le déploiement de vos applications (2e édition) ](https://www.eni-training.com/portal/client/mediabook/home)
 
 [Github-Ansible](https://github.com/EditionsENI/ansible)
