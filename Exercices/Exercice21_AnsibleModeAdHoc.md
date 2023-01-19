@@ -23,41 +23,52 @@ Le mode ad hoc est en général utilisé dans ces situations :
 ## Sur votre machine de contrôle 
 
 Modifier le fichier d'inventaire pour ne plus avoir d'erreurs sur localhost.
-```
-sudo su deploy
+
+```bash
+su deploy
 cd
 pwd
 ansible --version
-vi inventaire
+vim inventaire
 ```
-Contenu du fichier inventaire
-```
-localhost ansible_connection=local
 
-[Web]
-srv-apache-1 ansible_user=deploy
+Contenu du fichier inventaire
+
 ```
+[Web]
+srv-apache-1 ansible_user=deploy ansible_host=X.X.X.X # IP de votre hôte
+
+[local]
+control ansible_connection=local
+
+```
+
+**Attention** : le paramètre <code>ansible_user</code> n'est pas nécessaire, car nous l'avons déjà défini dans le fichier ansible.cfg.
 
 Vérifier le contenu du fichier
 
 ```
 cat inventaire
 ```
-Maintenant, nous pouvons faire les commandes ad hoc:
+
+Maintenant, nous pouvons faire les commandes ad hoc :  
+**Attention** : comme le fichier inventaire est défini dans le fichier ansible.cfg le paramètre <code>-i</code> n'est pas nécessaire.
 
 ```bash
 # Syntaxe :
 # Ansible -i[ fichier inventaire] [groupe de machine dans le fichier d'inventaire] -m [module]
-ansible -i inventaire all -m ping
+ansible all -m ping
 ```
+
 Sortie : 
 
 ![Module ping](img/ping.jpg)
 
 
 Maintenant, utilisons le module  [Copy](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html). Mais seulement sur la machine srv-apache-1 qui est dans le groupe Web :
+
 ```bash
-ansible -i inventaire Web -m copy -a "dest=/home/deploy/totot.txt content='Exercice Ansible ad hoc'"
+ansible Web -m copy -a "dest=/home/deploy/totot.txt content='Exercice Ansible ad hoc'"
 ```
 
 Sortie :
@@ -73,6 +84,7 @@ pwd
 ls 
 cat toto.txt
 ```
+
 ![Résultat](img/resultat.jpg)
 
 ## Sur votre machine de contrôle
@@ -80,9 +92,10 @@ cat toto.txt
 Exécutez à nouveau la commande :
 
 ```bash
-ansible -i inventaire Web -m copy -a "dest=/home/deploy/totot.txt content='Exercice Ansible ad hoc'"
+ansible Web -m copy -a "dest=/home/deploy/totot.txt content='Exercice Ansible ad hoc'"
 ```
-Remarquez les changements ( ou non-changement) au niveau changed:
+
+Remarquez les changements (ou non-changement) au niveau changed:
 
 ![Résultat](img/resultat2.jpg)
 
@@ -91,9 +104,10 @@ Si nous avions fait une copie avec scp, quelle aurait été la situation ?
 Vous pouvez le tester : 
 
 ```bash
-vi toto.txt # Aujoutez le contenu
+vim toto.txt # Aujoutez le contenu
 scp toto.txt srv-apache-1:/home/deploy/toto.txt
 ```
+
 Le fichier va écraser l'autre. Ansible lui voit que c'est le même contenu donc ne fait rien.
 
 Essayer à nouveau avec :
@@ -101,19 +115,22 @@ Essayer à nouveau avec :
 ```bash
 ansible -i inventaire Web -m copy -a "dest=/home/deploy/totot.txt content='Exercice Ansible ad hoc v2'"
 ```
-Ansible a  modifié le fichier
 
-et à nouveau avec la même commande :
+Ansible a modifié le fichier.
+
+À nouveau avec la même commande :
 
 ```bash
-ansible -i inventaire Web -m copy -a "dest=/home/deploy/totot.txt content='Exercice Ansible ad hoc v2'"
+ansible Web -m copy -a "dest=/home/deploy/totot.txt content='Exercice Ansible ad hoc v2'"
 ```
-Rien n'ai changé (changed:false)
+
+Rien n'a changé (changed:false)
 Essayer à nouveau avec ceci :
 
 ```bash
-ansible -i inventaire Web -m copy -a "dest=/home/deploy/totot.txt content='Exercice Ansible ad hoc v3'"
+ansible Web -m copy -a "dest=/home/deploy/totot.txt content='Exercice Ansible ad hoc v3'"
 ```
+
 Le fichier a changé (changed:true)
 
 Il exécute le changement seulement s’il y a changement. Alors que scp vas nécessairement écraser le fichier.
@@ -121,7 +138,7 @@ Il exécute le changement seulement s’il y a changement. Alors que scp vas né
 ## Il s'agit ici de la notion d'**idempotence** : 
 
 Un logiciel idempotent produit le même résultat souhaitable chaque fois qu'il est exécuté. 
-Dans un logiciel de déploiement, Idempotence permet la convergence et la composabilité et permet de :
+Dans un logiciel de déploiement, l'idempotence permet la convergence et la composabilité et permet de :  
 Rassembler plus facilement des composants dans des collections qui créent de nouveaux types d'infrastructure et effectuent de nouvelles tâches opérationnelles.
 Exécuter des collections complètes de développement/déploiement pour réparer en toute sécurité les petits problèmes d'infrastructure, effectuer des mises à niveau progressives, modifier la configuration ou gérer la mise à l'échelle. 
 
@@ -139,9 +156,10 @@ DFC DS -> VM DFC -> Modeles -> Production -> TPL_20210520_CentOsStream9
     
 - Après votre connexion, changer les informations suivantes 
 
-    - Nom de la machine (fichier /etc/hostname ) :srv-mysql-1
-    - Créer un compte : deploy  avec le même mot de passe que sur votre machine de contrôle
-    - Membre des groupes  et adm
+    - Nom de la machine (<code>sudo hostnamectl set-hostname srv-mysql-1</code>) : srv-mysql-1.
+    - Renseignez le fichier <code>/etc/hosts</code> pour qu'il prenne en considération la modification.
+    - Créer un compte : deploy avec le même mot de passe que sur votre machine de contrôle.
+    - Membre des groupes sudo et adm.
 
 
 ```bash
@@ -150,38 +168,40 @@ DFC DS -> VM DFC -> Modeles -> Production -> TPL_20210520_CentOsStream9
  sudo passwd deploy 
  # Confirmer nouveau mot de passe.
  su deploy # se connecter avec deploy
- passwd # changer le mot de passe
 ```
 
 ## Machine de contrôle 
 
-- Dans votre machine de contrôle, ajouter à votre fichier /etc/hosts l'adresse ip et le nom de votre srv-mysql-1.
 - Copier la clé ssh sur la machine srv-mysql-[matricule] (Voir exercice 17)
-- Faite un ping sur le nom pour vérifier qu'il n'y ai pas d'erreur :
-```
-ping srv-mysql-1
-```
 
 - Ajouter la machine à l'inventaire :
 
 ```bash
-vi inventaire
+vim inventaire
 
 #contenu du fichier inventaire :
-
-localhost ansible_connection=local
-
 [Mysql]
-srv-mysql-1 ansible_user=deploy
+srv-mysql-1 ansible_host=X.X.X.X # IP de votre hôte
+
 [Web]
-srv-apache-1 ansible_user=deploy
+srv-apache-1 ansible_host=X.X.X.X # IP de votre hôte
+
+[local]
+control ansible_connection=local
 
 ```
+
+Vérifiez la connectivité.
+
+```bash
+ansible all -m ping
+```
+
 
 Refaites la copie 
 
 ```bash
-ansible -i inventaire all -m copy -a "dest=/home/deploy/totot.txt content='Exercice Ansible ad hoc v3'"
+ansible all -m copy -a "dest=/home/deploy/totot.txt content='Exercice Ansible ad hoc v3'"
 ```
 
 ## Attention  : 
@@ -199,15 +219,17 @@ Avertissement:
 Modifier votre fichier d'inventaire à la ligne srv-mysql-1 de la façon suivante :
 
 ```bash
-srv-mysql-1 ansible_user=deploy ansible_python_interpreter=/usr/bin/python3
+srv-mysql-1 ansible_python_interpreter=/usr/bin/python3 ansible_host=X.X.X.X # IP de votre hôte
 ```
+
 Ce problème est bien décrit dans la documentation d’Ansible :
 https://docs.ansible.com/ansible/latest/reference_appendices/python_3_support.html
 
 
 Refaites la commande :
+
 ```bash
-ansible -i inventaire all -m copy -a "dest=/home/deploy/totot.txt content='Exercice Ansible ad hoc v3'"
+ansible all -m copy -a "dest=/home/deploy/totot.txt content='Exercice Ansible ad hoc v3'"
 ```
 
 Voici de nouveau la sortie sans avertissement et avec bien sûr, les changed : false:
@@ -220,7 +242,6 @@ Voici de nouveau la sortie sans avertissement et avec bien sûr, les changed : f
 # Ansible  - Mode ad hoc avec format YAML
 
 Dans cette partie de l'exercice, nous allons utiliser Ansible sur des machines distantes en mode ad hoc mais cette fois, avec un inventaire au format YAML.
-
  
 ## Sur votre machine avec de contrôle 
 
@@ -228,13 +249,15 @@ A l'aide de l'éditeur de votre choix, reproduire le fichier d'inventaire en for
 Vous pouvez vous aidez avec la [documentation](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html).
 
 ```
-cat inventaire
+cat inventaire.yaml
 ```
+
 Maintenant, nous pouvons faire les commandes ad hoc:
 
 ```bash
 ansible -i inventaire.yaml all -m ping
 ```
+
 **Attention : gardez une capture comme preuve de réalisation.**
 
 
@@ -245,12 +268,13 @@ Il scan la machine pour vous donnez l'ensemble des informations à exploiter dan
 Faites la commande :
 
 ```bash
-ansible -i inventaire all -m setup
+ansible all -m setup
 ```
+
 Comme la sortie est trop imposante, renvoyez-le tous dans un fichier :
 
 ```bash
-ansible -i inventaire all -m setup > setup.txt
+ansible all -m setup > setup.txt
 ```
 
 Astuce, vous avez probablement remarqué que votre usager deploy ne peut pas utiliser le mode graphique, car nous ne sommes pas connectés avec lui en mode graphique. 
@@ -262,10 +286,11 @@ Astuce, vous avez probablement remarqué que votre usager deploy ne peut pas uti
 ```
 sudo cp setup.txt /homme/[votreUsager]/setup.txt
 ```
+
 Remarquer les points suivants pour chacune des machines :
- - Adresse IP v4 et v6
- - Nos distributions : ansible_ditribution
- - Les variables d'environnement : ansible_env
+ - Adresse IPv4 et IPv6.
+ - Nos distributions : ansible_ditribution.
+ - Les variables d'environnement : ansible_env.
  - Plusieurs informations sur les éléments physiques de la machine :
     - Disque dur
     - Mémoire vive 
@@ -278,7 +303,7 @@ Remarquer les points suivants pour chacune des machines :
 Placer les capture des deux  commandes suivante dans un seul fichier et déposer le sur LÉA dans travaux exercice 21.
 
 ```bash
-ansible -i inventaire all -m copy -a "dest=/home/deploy/totot.txt content='Exercice Ansible ad hoc v3'"
+ansible all -m copy -a "dest=/home/deploy/totot.txt content='Exercice Ansible ad hoc v3'"
 ```
 
 ```bash
