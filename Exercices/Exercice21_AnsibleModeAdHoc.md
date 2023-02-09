@@ -276,7 +276,7 @@ Comme la sortie est trop imposante, renvoyez-le tous dans un fichier :
 ansible all -m setup > setup.txt
 ```
 
-Astuce, vous avez probablement remarqué que votre usager deploy ne peut pas utiliser le mode graphique, car nous ne sommes pas connectés avec lui en mode graphique. 
+**Attention** : il se peut que votre usager <code>deploy</code> ne soit pas connecté en mode graphique, alors vous ne pouvez pas utiliser le mode graphique. 
 
 2 options s'offrent à vous : 
   - Connectez-vous avec l'usager deploy en mode graphique.
