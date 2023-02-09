@@ -187,7 +187,7 @@ DFC DS -> VM DFC -> Modeles -> Production -> TPL_20210422_Ub2004Cli
 - Sélectionnez le modèle de VM et cliquez sur le bouton droit de votre souris et sélectionnez Nouvelle VM à partir de ce modèle...
 - Suivez les étapes 
     - Nom de la VM : srv-apache-[matricule]
-    - Emplacement : DFC DS -> VM DFC -> E22_4393_420W44_ITV_JPD
+    - Emplacement : DFC DS -> VM DFC -> A22_4394_420W45_ISS_JPD
     - Stockage : SAN-DFC
     
 - Après votre connexion, changer les informations suivantes 
