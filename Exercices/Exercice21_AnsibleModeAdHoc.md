@@ -14,7 +14,7 @@ Le mode ad hoc est en général utilisé dans ces situations :
   - utilisez une commande ad hoc pour tenter de rejoindre le/les clients Ansible
   - Utilisez la commande ad hoc pour créer un fichier toto.txt avec le contenu "Exercice Ansible ad hoc" qui se trouvera sur les clients, et ce, dans le dossier /home/deploy/toto.txt 
   - Vérifier que le fichier a bien été créé avec le contenu
-  - Rajoutez un client et modifiez le fichier inventaire afin de rajouter le nouveau client (CentOS).
+  - Rajoutez un client et modifiez le fichier inventaire afin de rajouter le nouveau client (Ubuntu ou CentOS).
   - Relancez l'action ping et de création de fichiers sur les clients.
  - Vérifier le résultat
  - Testez l'effet du module "setup" sur votre inventaire.
@@ -68,7 +68,7 @@ Sortie :
 Maintenant, utilisons le module  [Copy](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html). Mais seulement sur la machine srv-apache-1 qui est dans le groupe Web :
 
 ```bash
-ansible Web -m copy -a "dest=/home/deploy/totot.txt content='Exercice Ansible ad hoc'"
+ansible Web -m copy -a "dest=/home/deploy/toto.txt content='Exercice Ansible ad hoc'"
 ```
 
 Sortie :
@@ -92,7 +92,7 @@ cat toto.txt
 Exécutez à nouveau la commande :
 
 ```bash
-ansible Web -m copy -a "dest=/home/deploy/totot.txt content='Exercice Ansible ad hoc'"
+ansible Web -m copy -a "dest=/home/deploy/toto.txt content='Exercice Ansible ad hoc'"
 ```
 
 Remarquez les changements (ou non-changement) au niveau changed:
@@ -113,7 +113,7 @@ Le fichier va écraser l'autre. Ansible lui voit que c'est le même contenu donc
 Essayer à nouveau avec :
 
 ```bash
-ansible -i inventaire Web -m copy -a "dest=/home/deploy/totot.txt content='Exercice Ansible ad hoc v2'"
+ansible -i inventaire Web -m copy -a "dest=/home/deploy/toto.txt content='Exercice Ansible ad hoc v2'"
 ```
 
 Ansible a modifié le fichier.
@@ -121,14 +121,14 @@ Ansible a modifié le fichier.
 À nouveau avec la même commande :
 
 ```bash
-ansible Web -m copy -a "dest=/home/deploy/totot.txt content='Exercice Ansible ad hoc v2'"
+ansible Web -m copy -a "dest=/home/deploy/toto.txt content='Exercice Ansible ad hoc v2'"
 ```
 
 Rien n'a changé (changed:false)
 Essayer à nouveau avec ceci :
 
 ```bash
-ansible Web -m copy -a "dest=/home/deploy/totot.txt content='Exercice Ansible ad hoc v3'"
+ansible Web -m copy -a "dest=/home/deploy/toto.txt content='Exercice Ansible ad hoc v3'"
 ```
 
 Le fichier a changé (changed:true)
@@ -151,7 +151,7 @@ DFC DS -> VM DFC -> Modeles -> Production -> TPL_20210520_CentOsStream9
 - Sélectionnez le modèle de VM et cliquez sur le bouton droit de votre souris et sélectionnez Nouvelle VM à partir de ce modèle...
 - Suivez les étapes 
     - Nom de la VM : srv-mysql-[matricule]
-    - Emplacement : DFC DS -> VM DFC -> H22_4392_420W45_ISS_JPD
+    - Emplacement : DFC DS -> VM DFC -> A22_4394_420W45_ISS_JPD
     - Stockage : SAN-DFC
     
 - Après votre connexion, changer les informations suivantes 
@@ -201,7 +201,7 @@ ansible all -m ping
 Refaites la copie 
 
 ```bash
-ansible all -m copy -a "dest=/home/deploy/totot.txt content='Exercice Ansible ad hoc v3'"
+ansible all -m copy -a "dest=/home/deploy/toto.txt content='Exercice Ansible ad hoc v3'"
 ```
 
 ## Attention  : 
@@ -229,7 +229,7 @@ https://docs.ansible.com/ansible/latest/reference_appendices/python_3_support.ht
 Refaites la commande :
 
 ```bash
-ansible all -m copy -a "dest=/home/deploy/totot.txt content='Exercice Ansible ad hoc v3'"
+ansible all -m copy -a "dest=/home/deploy/toto.txt content='Exercice Ansible ad hoc v3'"
 ```
 
 Voici de nouveau la sortie sans avertissement et avec bien sûr, les changed : false:
@@ -303,7 +303,7 @@ Remarquer les points suivants pour chacune des machines :
 Placer les capture des deux  commandes suivante dans un seul fichier et déposer le sur LÉA dans travaux exercice 21.
 
 ```bash
-ansible all -m copy -a "dest=/home/deploy/totot.txt content='Exercice Ansible ad hoc v3'"
+ansible all -m copy -a "dest=/home/deploy/toto.txt content='Exercice Ansible ad hoc v3'"
 ```
 
 ```bash
