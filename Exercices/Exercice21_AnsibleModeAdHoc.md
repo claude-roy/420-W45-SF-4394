@@ -105,7 +105,7 @@ Vous pouvez le tester :
 
 ```bash
 vim toto.txt # Aujoutez le contenu
-scp toto.txt srv-apache-1:/home/deploy/toto.txt
+scp toto.txt deploy@x.x.x.x:/home/deploy/toto.txt #Remplacer x.x.x.x par l'adresse IP de votre serveur
 ```
 
 Le fichier va écraser l'autre. Ansible lui voit que c'est le même contenu donc ne fait rien.
@@ -157,8 +157,7 @@ DFC DS -> VM DFC -> Modeles -> Production -> TPL_20210520_CentOsStream9
 - Après votre connexion, changer les informations suivantes 
 
     - Nom de la machine (<code>sudo hostnamectl set-hostname srv-mysql-1</code>) : srv-mysql-1.
-    - Renseignez le fichier <code>/etc/hosts</code> pour qu'il prenne en considération la modification.
-    - Créer un compte : deploy avec le même mot de passe que sur votre machine de contrôle.
+     - Créer un compte : deploy avec le même mot de passe que sur votre machine de contrôle.
     - Membre des groupes sudo et adm.
 
 

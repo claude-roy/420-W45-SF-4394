@@ -193,7 +193,6 @@ DFC DS -> VM DFC -> Modeles -> Production -> TPL_20210422_Ub2004Cli
 - Après votre connexion, changer les informations suivantes 
 
     - Nom de la machine (<code>sudo hostnamectl set-hostname srv-apache-1</code> ) : srv-apache-1
-    - Renseignez le fichier <code>/etc/hosts</code> pour qu'il prenne en considération la modification.
 
     - Créer un compte : deploy  avec le même mot de passe que sur votre machine de gestion
     - Membre des groupes sudo et admin
