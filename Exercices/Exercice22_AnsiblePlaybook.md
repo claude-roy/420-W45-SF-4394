@@ -226,7 +226,7 @@ Nous n'avons pas les droits. Le compte deploy n'est pas suffisant. Il faut une �
 Exécution de playbook
 
 ```
-ansible-playbook -i inventaire.yaml deploy.yaml
+ansible-playbook deploy.yaml
 ```
 
 Cette fois, "sudo: il est nécessaire de saisir un mot de passe". 
@@ -257,7 +257,7 @@ Nous allons y aller pour la façon la plus  simple bien sure, la moins sécurita
 Exécution de playbook
 
 ```
-ansible-playbook -i inventaire.yaml deploy.yaml
+ansible-playbook deploy.yaml
 ```
 
 Résultat attendu : 
@@ -275,9 +275,12 @@ Et aussi sur la machine srv-apache-1 :
 
 
 ## 8- Sortir le mot de passe du playbook
+Enlevez les objets (entrées) <code>vars</code> et <code>ansible_sudo_pass</code> de votre fichier <code>deploy.yml</code>.
+
+Modifiez le fichier <code>ansible.cfg</code> comme suit :
 
 ```bash
-vi ansible.cfg
+vim ansible.cfg
 
 # Ajoutons le paramètre nécessaire:
 [privilege_escalation]
@@ -287,7 +290,7 @@ become_ask_pass=true
 Exécution de playbook
 
 ```bash
-ansible-playbook -i inventaire.yaml deploy.yaml
+ansible-playbook deploy.yaml
 ```
 
 Le mot de passe est demandé.
@@ -376,3 +379,6 @@ cat inventaire.yaml
 cat deploy.yaml
 ansible-playbook -i inventaire.yaml deploy.yaml --ask-vaut-pass
 ```
+
+## Références
+[Documentation ansible pour group_vars](https://docs.ansible.com/ansible/latest/inventory_guide/intro_inventory.html#organizing-host-and-group-variables)
