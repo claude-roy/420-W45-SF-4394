@@ -69,27 +69,7 @@ prod:
 
 Modifiez votre fichier <code>ansible.cfg</code> pour qu'il tienne compte du nouveau fichier d'inventaire.
 
-## 4- Création des group_vars:
-Nous allons utiliser des variables de groupe défini dans un répertoire nommer <code>group_vars</code>.  
-Le fichier <code>hosts</code> ou d'inventaire et le répertoire <code>group_vars</code> sont utilisés pour définir des variables pour les groupes d'hôtes et déployer lors des lectures/tâches Ansible sur chaque hôte/groupe. Les fichiers sous le répertoire <code>group_var</code> sont nommés d'après le nom du groupe d'hôtes ou all (pour tous), en conséquence, les variables seront affectées à ce groupe d'hôtes ou à tous les hôtes.
-
-Créer un répertoire group_vars qui va contenir un fichier nommé <code>prod.yaml</code> qui contiendra les informations de connexion à utiliser par Ansible (Login et mot de passe)
-
-```Bash
-mkdir group_vars
-vi group_vars/prod.yaml
-```
-
-Contenus du fichier prod.yaml
-
-```yaml
----
-all: 
-  ansible_user: deploy
-  ansible_password: votreMotDePasse
-```
-
-## 5- Créez un playbook nommé deploy.yaml
+## 4- Créez un playbook nommé deploy.yaml
 
 Un playbook Ansible est un fichier YAML contenant un ou plusieurs plays. Chaque play est un ensemble de tâches.  
 
@@ -134,7 +114,7 @@ vim deploy.yaml
           - "80:80"
 ```
 
-## 6- Vérifier la syntaxe du playbook
+## 5- Vérifier la syntaxe du playbook
 Pour avoir l'outil de vérification de la syntaxe, nous aurons besoin d'ansible-lint qui s'installe avec l'installateur de package pour Python PIP. Voici les étapes :
 
 ```bash
@@ -160,7 +140,7 @@ sudo apt install Ansible
 </details>
 
 
-## 7- Lancer le playbook
+## 6- Lancer le playbook
 
 ```
 ansible-playbook -i inventaire.yaml deploy.yaml
@@ -274,7 +254,7 @@ Et aussi sur la machine srv-apache-1 :
 ![Cmd Docker ps](img/dockerps.jpg)
 
 
-## 8- Sortir le mot de passe du playbook
+## 7- Sortir le mot de passe du playbook
 Enlevez les objets (entrées) <code>vars</code> et <code>ansible_sudo_pass</code> de votre fichier <code>deploy.yml</code>.
 
 Modifiez le fichier <code>ansible.cfg</code> comme suit :
@@ -287,7 +267,7 @@ vim ansible.cfg
 become_ask_pass=true
 ```
 
-Exécution de playbook
+Exécution du playbook.
 
 ```bash
 ansible-playbook deploy.yaml
@@ -295,7 +275,7 @@ ansible-playbook deploy.yaml
 
 Le mot de passe est demandé.
 
-## 9- Ansible Vault pour plus de sécurité
+## 8- Ansible Vault pour plus de sécurité
 Essentiellement, Vault est un moyen pour garder secrètes les informations sensibles
 de votre configuration Ansible. Il vous permet de chiffrer vos fichiers plutôt que d'avoir du texte brut dans vos playbooks.  
 
