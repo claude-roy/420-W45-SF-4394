@@ -67,6 +67,7 @@ prod:
        ansible_host: 10.0.1.4 # A remplacer par l'IP de votre client
 ```
 
+Modifiez votre fichier <code>ansible.cfg</code> pour qu'il tienne compte du nouveau fichier d'inventaire.
 
 ## 4- Création des group_vars:
 Nous allons utiliser des variables de groupe défini dans un répertoire nommer <code>group_vars</code>.  
