@@ -201,7 +201,7 @@ ansible-playbook -i inventaire.yaml deploy.yaml
 
 Nouvelle erreur: Permision  denied
 
-Nous n'avons pas les droits. Le compte deploy n'est pas suffisant. Il faut une élévation de privilège. Avec l'ajout de become: true
+Nous n'avons pas les droits. Le compte deploy n'est pas suffisant. Il faut une élévation de privilège. Avec l'ajout de <code>become: true</code>
 
 ```yaml
 ---
