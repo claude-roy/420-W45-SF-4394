@@ -230,7 +230,7 @@ ansible-playbook -i inventaire.yaml deploy.yaml
 ```
 
 Cette fois, "sudo: il est nécessaire de saisir un mot de passe". 
-Nous allons y aller pour la façon la plus  simple bien sure, la moins sûr :
+Nous allons y aller pour la façon la plus  simple bien sure, la moins sécuritaire :
 
 ```yaml
 ---
