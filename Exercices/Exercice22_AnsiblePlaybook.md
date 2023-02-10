@@ -9,8 +9,8 @@ Dans cet exercice, vous allez utiliser Ansible sur des machines distantes avec d
   - Créer un fichier d'inventaire pour le projet 
   - Créer un groupe *prod* dans votre fichier d'inventaire. 
   - Créer un fichier group_vars qui va contenir un fichier nommé *prod* qui contiendra les informations de connexion à utiliser par Ansible (Login et mot de passe)
-  - Créez un playbook nommé deloy.yaml permettant de déployer apache à l'aide de Docker sur le client (l'image à utiliser est httpd et le port à exposer à l'extérieur est le 80)
-  - Vous devez installer tout le prérequis  à l'aide du module apt.
+  - Créez un playbook nommé deploy.yaml permettant de déployer apache à l'aide de Docker sur le client (l'image à utiliser est httpd et le port à exposer à l'extérieur est le 80)
+  - Vous devez installer tous les prérequis à l'aide du module apt.
   - Vérifier la syntaxe du playbook avec la commande *ansible-lint* 
   - Vérifier qu'après l'exécution de votre playbook le site par défaut d’apache est bien disponible sur le port 80
   - Extraire le mot de passe.
