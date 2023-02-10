@@ -117,7 +117,7 @@ La commande <code>ansible-playbook</code> utilise des paramètres pour spécifie
 Créez un playbook nommé <code>deploy.yaml</code> permettant de déployer Apache à l'aide de Docker sur le client (l'image à utiliser est httpd et le port à exposer à l'extérieur est le 80)
 
 ```Bash
-vi deploy.yaml
+vim deploy.yaml
 ```
 
 ```yaml
@@ -130,7 +130,7 @@ vi deploy.yaml
         name: webapp
         image: httpd
         ports:
-            - "80:80"
+          - "80:80"
 ```
 
 ## 6- Vérifier la syntaxe du playbook
@@ -164,6 +164,8 @@ sudo apt install Ansible
 ```
 ansible-playbook -i inventaire.yaml deploy.yaml
 ```
+
+**Attention :** le paramètre <code>-i inventaire.yaml</code> est optionel si le fichier d'inventaire est déjà défini dans le fichier <code>ansible.cfg</code>.
 
 Il devrait avoir une erreur d'absence du module Docker (l'erreur peut être différente):
 
