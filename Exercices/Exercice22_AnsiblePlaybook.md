@@ -185,7 +185,7 @@ On va ajouter le module manquant directement dans le playbook, c'est sa raison d
         update_cache: yes
   tasks:
     - name : Create Apache container
-      docker_container:
+      community.docker.docker_container:
         name: webapp
         image: httpd
         ports:
