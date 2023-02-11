@@ -255,7 +255,32 @@ Et aussi sur la machine srv-apache-1 :
 
 
 ## 7- Sortir le mot de passe du playbook
-Enlevez les objets (entrées) <code>vars</code> et <code>ansible_sudo_pass</code> de votre fichier <code>deploy.yml</code>.
+Enlevez les objets (entrées) <code>vars</code> et <code>ansible_sudo_pass</code> de votre fichier <code>deploy.yaml</code>.
+
+Créer un répertoire <code>group_vars</code> qui va contenir un fichier nommé <code>prod.yaml</> qui contiendra les informations de connexion à utiliser par Ansible (Login et mot de passe)
+
+```Bash
+mkdir group_vars
+vim group_vars/prod.yaml
+```
+
+Contenus du fichier prod.yaml
+
+```yaml
+---
+ansible_user: deploy
+ansible_sudo_pass: votreMotDePasse
+```
+
+Exécution du playbook.
+
+```bash
+ansible-playbook deploy.yaml
+```
+
+Jusqu'à date, nous avons toujours le mot de passe dans un fichier texte. Donc, nous avons un problème de sécurité.
+
+Enlevez l'objets (entrée) <code>ansible_sudo_pass</code> de votre fichier <code>prod.yaml</code>.
 
 Modifiez le fichier <code>ansible.cfg</code> comme suit :
 
@@ -274,6 +299,7 @@ ansible-playbook deploy.yaml
 ```
 
 Le mot de passe est demandé.
+
 
 ## 8- Ansible Vault pour plus de sécurité
 Essentiellement, Vault est un moyen pour garder secrètes les informations sensibles
@@ -302,7 +328,7 @@ Entrez le mot de passe de l'utilisateur deploy (pour l'utilisation de la command
 
 ```yaml
 # À ajouter dans le fichier
-ansible_sudo_pass: "MotDePasse"
+ansible_sudo_pass: votreMotDePasse
 ```
 
 Pour éditer à nouveau le fichier, vous utilisez la commande <code>ansible-vault edit NomFichier</code>.
@@ -341,7 +367,7 @@ Modifiez le fichier <code>deploy.yaml</code> pour ajouter le fichier contenant l
 Maintenant, on doit ajouter le paramètre <code>--ask-vault-pass</code> au lancement de notre playbook :
 
 ```bash
-ansible-playbook -i inventaire.yaml deploy.yaml --ask-vault-pass
+ansible-playbook deploy.yaml --ask-vault-pass
 ```
 
 Le mot de passe pour ouvrir le fichier <code>secret-variables.yaml</code> est demandé.
