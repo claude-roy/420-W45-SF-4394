@@ -6,15 +6,15 @@ Dans cet exercice, vous allez utiliser Ansible sur des machines distantes avec d
  
   - Créer un dossier *webapp* qui va contenir tous les fichiers du projet.
   - Créer un dépôt git pour le projet et le placer sur GitHub.
-  - Créer un fichier d'inventaire pour le projet 
+  - Créer un fichier d'inventaire pour le projet. 
   - Créer un groupe *prod* dans votre fichier d'inventaire. 
-  - Créer un fichier group_vars qui va contenir un fichier nommé *prod* qui contiendra les informations de connexion à utiliser par Ansible (Login et mot de passe)
-  - Créez un playbook nommé deploy.yaml permettant de déployer apache à l'aide de Docker sur le client (l'image à utiliser est httpd et le port à exposer à l'extérieur est le 80)
+  - Créer un fichier group_vars qui va contenir un fichier nommé *prod* qui contiendra les informations de connexion à utiliser par Ansible (Login et mot de passe).  
+  - Créez un playbook nommé deploy.yaml permettant de déployer apache à l'aide de Docker sur le client (l'image à utiliser est httpd et le port à exposer à l'extérieur est le 80).  
   - Vous devez installer tous les prérequis à l'aide du module apt.
-  - Vérifier la syntaxe du playbook avec la commande *ansible-lint* 
-  - Vérifier qu'après l'exécution de votre playbook le site par défaut d’apache est bien disponible sur le port 80
+  - Vérifier la syntaxe du playbook avec la commande *ansible-lint*.  
+  - Vérifier qu'après l'exécution de votre playbook le site par défaut d’apache est bien disponible sur le port 80.  
   - Extraire le mot de passe.
-  - Explorez les options de debug d’Ansible
+  - Explorez les options de debug d’Ansible.  
   - Afin de conserver votre travail, poussez sur votre Github en mode privé. 
   - Ajouter le professeur à votre dépôt github.
 
@@ -91,11 +91,11 @@ ansible-playbook mon_playbook.yaml -i inventaire.yaml
 ```
 
 La commande <code>ansible-playbook</code> utilise des paramètres pour spécifier :  
-- Le playbook que vous voulez exécuter (mon_playbook.yaml)
+- Le playbook que vous voulez exécuter (mon_playbook.yaml).
 - Le fichier d'inventaire et son emplacement (-i hosts). Ce paramètre est nécessaire si vous n'avez pas de fichier <code>ansible.cfg</code> qui change son emplacement par défaut.
 
 
-Créez un playbook nommé <code>deploy.yaml</code> permettant de déployer Apache à l'aide de Docker sur le client (l'image à utiliser est httpd et le port à exposer à l'extérieur est le 80)
+Créez un playbook nommé <code>deploy.yaml</code> permettant de déployer Apache à l'aide de Docker sur le client (l'image à utiliser est httpd et le port à exposer à l'extérieur est le 80).  
 
 ```Bash
 vim deploy.yaml
@@ -123,7 +123,7 @@ sudo pip install ansible-lint
 # Finalement, nous pouvons vérifier le fichier: 
 ansible-lint deploy.yaml
 ```
-Lorsqu'il n'y a pas d'erreur, exécutez le playbook
+Lorsqu'il n'y a pas d'erreur, exécutez le playbook.  
 
 >[Attention]
   J'ai eu constamment une erreur. J'ai dû faire une nouvelle installation d’Ansible en allant chercher la version chez Ansible plutôt que celle d'Ubuntu. Voici les commandes :
@@ -173,7 +173,7 @@ On va ajouter le module manquant directement dans le playbook, c'est sa raison d
             - "80:80"
 ```
 
-Exécution du playbook
+Exécution du playbook.  
 
 ```
 ansible-playbook -i inventaire.yaml deploy.yaml
@@ -181,7 +181,7 @@ ansible-playbook -i inventaire.yaml deploy.yaml
 
 Nouvelle erreur: Permision  denied
 
-Nous n'avons pas les droits. Le compte deploy n'est pas suffisant. Il faut une élévation de privilège. Avec l'ajout de <code>become: true</code>
+Nous n'avons pas les droits. Le compte deploy n'est pas suffisant. Il faut une élévation de privilège. Avec l'ajout de <code>become: true</code>.  
 
 ```yaml
 ---
@@ -203,7 +203,7 @@ Nous n'avons pas les droits. Le compte deploy n'est pas suffisant. Il faut une �
             - "80:80"
 ```
 
-Exécution de playbook
+Exécution de playbook.  
 
 ```
 ansible-playbook deploy.yaml
@@ -234,7 +234,7 @@ Nous allons y aller pour la façon la plus  simple bien sure, la moins sécurita
             - "80:80"
 ```
 
-Exécution de playbook
+Exécution de playbook.  
 
 ```
 ansible-playbook deploy.yaml
