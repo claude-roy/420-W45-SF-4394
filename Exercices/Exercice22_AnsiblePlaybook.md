@@ -257,7 +257,7 @@ Et aussi sur la machine srv-apache-1 :
 ## 7- Sortir le mot de passe du playbook
 Enlevez les objets (entrées) <code>vars</code> et <code>ansible_sudo_pass</code> de votre fichier <code>deploy.yaml</code>.
 
-Créer un répertoire <code>group_vars</code> qui va contenir un fichier nommé <code>prod.yaml</> qui contiendra les informations de connexion à utiliser par Ansible (Login et mot de passe)
+Créer un répertoire <code>group_vars</code> qui va contenir un fichier nommé <code>prod.yaml</code> qui contiendra les informations de connexion à utiliser par Ansible (Login et mot de passe)
 
 ```Bash
 mkdir group_vars
