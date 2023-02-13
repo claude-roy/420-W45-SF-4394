@@ -30,4 +30,9 @@ Les identifiants des machines virtuelles sont :
 - Nom d'utilisateur: env-admin  
 - Mot de passe: admin-env
 
+Les VMs serveurs ont des adresses statiques. Vous pouvez leur assigner une adresse dans le réseau 192.168.1.0/24 ou utilisr la commande :
+
+```bash
+sudo dhclient -v ens3
+```
 
