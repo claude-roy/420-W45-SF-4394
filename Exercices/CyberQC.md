@@ -5,13 +5,13 @@ Voici les informations pour l'utilisation de l'environnement de CyberQuébec.
 ### Connexion au VPN
 Pour vous connecter au VPN, naviguez à l'adresse [https://vpn.cyberquebec.org](https://vpn.cyberquebec.org) et entrez avec votre compte.
 
-###Connexion au CyberRange
+### Connexion au CyberRange
 Une fois connectée au VPN, cliquez sur **OpenNebula** et utilisez les mêmes identifiants pour rejoindre le CyberRange.
 
 ![Connexion au VPN](img/ConnexionVPN.png)
 
 
-###Connexion aux machines virtuelles  
+### Connexion aux machines virtuelles  
 Une fois connectée, vous arrivez à votre tableau de bord. Pour accéder à vos VMs, cliquez sur le carré du groupe.
 
 ![Accès aux VMs](img/groupeVMs.png)
