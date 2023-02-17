@@ -5,7 +5,7 @@
 
 - Évaluation : 25 % de la session (15 % pour le TP3 directement et 10 % pour L'EFCS)
 - Type de travail : individuel
-- Date de remise : 27 février 2022
+- Date de remise : 27 février 2023
 - Durée : 10 heures, dont 2 séances (24 février et 27 février). 
 - Système d’exploitation : Linux Ubuntu / Docker
 - Environnement : Docker
@@ -26,13 +26,18 @@ Nginx est utilisé comme équilibreur de charge pour avoir une structure comme c
 ![Infra](img/EFCS.jpg)
 
 
+**Attention :** même si sur l'image les deux serveurs php point vers un seul serveur MySQL, vous allez implanter 2 serveurs MySQL.
+
 Donc, on se connecte sur <code>www.efcs.com</code> qui appelle le proxy nginx qui lui appelle en en alternance les serveurs 1 et 2. Chacun des serveurs est relié à un serveur php et à un serveur MySQL.  
 
+- Vous aurez trois VMs serveurs : une pour l'équillibreur de charge et deux pour les serveurs Web (n'oubliez pas de renommer vos VMs, de créer les utilisateurs...) 
+- Les services seront des conteneurs.  
 - Les deux serveurs web doivent être identiques, à part une information, dans la page Web, qui permet de distinguer le serveur 1 et le serveur 2, adresse IP et Nom.  
-- Les serveurs httpd et le serveur proxy seront reliés à un réseau avant.  
-- Les serveurs httpd auront chacun leur réseau arrière pour communiquer avec leurs serveurs php.  
-- Le contenu des serveurs httpd doit être monté par un point de montage à un répertoire de votre VM.  
-- Le serveur MYSQL doit avoir un volume de données persistant.  
+- Les serveurs httpd seront reliés à un réseau avant pour la communication extérieur.  
+- Les serveurs httpd auront chacun leur réseau arrière pour communiquer avec leurs serveurs php et MySQL.  
+- Le fichier de configuration de httpd doit être monté par un point de montage au fichier httpd.conf du conteneur.
+- Le contenu des serveurs httpd doit être monté par un point de montage à un répertoire de la VM.  
+- Le serveur MYSQL doit avoir un volume de données persistant dans la VM.  
 - Vous devrez démontrer le système fonctionnel.  
 
 **Attention :** ne mettez pas de dépendance aux serveurs httpd.
@@ -56,7 +61,7 @@ Donc, on se connecte sur <code>www.efcs.com</code> qui appelle le proxy nginx qu
 
 ### Votre déploiement :
 
-- Se fait avec une seule commande et reproduit toute l'architecture.
+- Se fait avec une seule commande et reproduit toute l'architecture : vous allez avoir un playbook nommé deploiement.yaml.
 
 ## Remise 
 Vous devez fournir (déposé sur LÉA) :
@@ -91,3 +96,52 @@ Votre vidéo :
 ||Voir les logs |10|
 |Compréhension||10|
 |**Total** ||**100**|
+
+## Informations supplémentaires :
+
+Pour créer un playbook qui regroupe tous les playbook, vous utilisez le module <code>import_playbook</code>.
+
+```yaml
+---
+- name: Configure LoadBalancer
+  ansible.builtin.import_playbook: loadBalancer.yaml
+- name: Configure les serveurs Web
+  ansible.builtin.import_playbook: Web.yaml
+
+```
+
+Vous pouvez utiliser le module <code>copy</code> dans un playbook :
+
+```yaml
+  tasks:
+    - name: Telecharger Application
+      copy:
+        src: ./index.php
+        dest: /home/admin/html/index.php
+        mode: 0755
+
+```
+
+Pour organiser vos fichiers, vous pouvez créer des répertoires avec le module <code>file</code> :
+
+```yaml
+  tasks:
+    - name: Creates directory
+      ansible.builtin.file:
+        path: /home/admin/html
+        state: directory
+        owner: admin
+        group: admin
+        mode: 0775
+```
+
+## Références :
+
+[Documentation ansible pour group_vars](https://docs.ansible.com/ansible/latest/inventory_guide/intro_inventory.html#organizing-host-and-group-variables)  
+[Documentation ansible pour import_playbook](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/import_playbook_module.html)  
+[Documentation ansible pour copy](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html)
+[Documentation ansible pour file](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html#file-module)  
+[Documentation pour une adresse statique sur un serveur Ubuntu 22.04](https://www.linuxtechi.com/static-ip-address-on-ubuntu-server/)
+
+https://stackoverflow.com/questions/4420468/php-display-server-ip-address
+
