@@ -54,7 +54,7 @@ Donc, on se connecte sur <code>www.efcs.com</code> qui appelle le proxy nginx qu
 
 ### Vous devez avoir des playbook pour :
 
-- LoadBalanceur
+- LoadBalancer
 - Web
 - php
 - bd
@@ -137,6 +137,7 @@ Pour organiser vos fichiers, vous pouvez créer des répertoires avec le module 
 
 ## Références :
 
+[Documentation ansible pour fichier inventaire avec des relations parent/enfant](https://docs.ansible.com/ansible/latest/inventory_guide/intro_inventory.html#grouping-groups-parent-child-group-relationships)  
 [Documentation ansible pour group_vars](https://docs.ansible.com/ansible/latest/inventory_guide/intro_inventory.html#organizing-host-and-group-variables)  
 [Documentation ansible pour import_playbook](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/import_playbook_module.html)  
 [Documentation ansible pour copy](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html)
