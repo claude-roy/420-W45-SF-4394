@@ -28,14 +28,14 @@ Nginx est utilisé comme équilibreur de charge pour avoir une structure comme c
 
 **Attention :** même si sur l'image les deux serveurs php point vers un seul serveur MySQL, vous allez implanter 2 serveurs MySQL.
 
-Donc, on se connecte sur <code>www.efcs.com</code> qui appelle le proxy nginx qui lui appelle en en alternance les serveurs 1 et 2. Chacun des serveurs est relié à un serveur php et à un serveur MySQL.  
+Donc, on se connecte sur <code>www.efcs.com</code> qui appelle le proxy nginx qui lui appelle en alternance les serveurs 1 et 2. Chacun des serveurs est relié à un serveur php et à un serveur MySQL.  
 
-- Vous aurez trois VMs serveurs : une pour l'équillibreur de charge et deux pour les serveurs Web (n'oubliez pas de renommer vos VMs, de créer les utilisateurs...) 
+- Vous aurez trois VMs serveurs : une pour l'équilibreur de charge et deux pour les serveurs Web (n'oubliez pas de renommer vos VMs, de créer les utilisateurs...) 
 - Les services seront des conteneurs.  
-- Les deux serveurs web doivent être identiques, à part une information, dans la page Web, qui permet de distinguer le serveur 1 et le serveur 2, adresse IP et Nom.  
+- Les deux serveurs web doivent être identiques, à part une information, dans la page Web, qui permet de distinguer le serveur 1 et le serveur 2 : par exemple le hostname ou/et l'adresse IP.  
 - Les serveurs httpd seront reliés à un réseau avant pour la communication extérieur.  
 - Les serveurs httpd auront chacun leur réseau arrière pour communiquer avec leurs serveurs php et MySQL.  
-- Le fichier de configuration de httpd doit être monté par un point de montage au fichier httpd.conf du conteneur.
+- Le fichier de configuration de httpd.conf doit être monté par un point de montage au fichier httpd.conf du conteneur.
 - Le contenu des serveurs httpd doit être monté par un point de montage à un répertoire de la VM.  
 - Le serveur MYSQL doit avoir un volume de données persistant dans la VM.  
 - Vous devrez démontrer le système fonctionnel.  
@@ -48,20 +48,18 @@ Donc, on se connecte sur <code>www.efcs.com</code> qui appelle le proxy nginx qu
 
 - Tous les hôtes via le groupe "all" et ils devront avoir pour login <code>admin</code>.  
 - Les clients devront faire partie d'un groupe appeler "prod".  
-- Le mot de passe à utiliser pour toutes les connexions ssh devra être admin  pour toutes les machines du groupe "prod".  
-- Les mots de passe doivent être placer dans un fichier chiffrer par Ansible Vault. Le mot de passe pour l'Ansible Vault est <code>secret</code>.  
+- Le mot de passe à utiliser pour toutes les connexions ssh devra être admin pour toutes les machines du groupe "prod".  
+- Les mots de passe doivent être placés dans un fichier chiffrer par Ansible Vault. Le mot de passe pour l'Ansible Vault est <code>secret</code>.  
 - La variable "env" devra être égale à "production" pour toutes les machines du group "prod". La variable doit être placée dans une variable de groupe.  
 
 ### Vous devez avoir des playbook pour :
 
 - LoadBalancer
-- Web
-- php
-- bd
+- Web : gère également php et MySQL
 
 ### Votre déploiement :
 
-- Se fait avec une seule commande et reproduit toute l'architecture : vous allez avoir un playbook nommé deploiement.yaml.
+- Se fait avec une seule commande et reproduit toute l'architecture : vous allez avoir un playbook nommé <code>deploiement.yaml</code>.
 
 ## Remise 
 Vous devez fournir (déposé sur LÉA) :
@@ -140,9 +138,8 @@ Pour organiser vos fichiers, vous pouvez créer des répertoires avec le module 
 [Documentation ansible pour fichier inventaire avec des relations parent/enfant](https://docs.ansible.com/ansible/latest/inventory_guide/intro_inventory.html#grouping-groups-parent-child-group-relationships)  
 [Documentation ansible pour group_vars](https://docs.ansible.com/ansible/latest/inventory_guide/intro_inventory.html#organizing-host-and-group-variables)  
 [Documentation ansible pour import_playbook](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/import_playbook_module.html)  
-[Documentation ansible pour copy](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html)
+[Documentation ansible pour copy](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html)  
 [Documentation ansible pour file](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html#file-module)  
-[Documentation pour une adresse statique sur un serveur Ubuntu 22.04](https://www.linuxtechi.com/static-ip-address-on-ubuntu-server/)
-
-https://stackoverflow.com/questions/4420468/php-display-server-ip-address
-
+[Documentation de Community.Docker](https://docs.ansible.com/ansible/latest/collections/community/docker/index.html#description)  
+[Documentation pour une adresse statique sur un serveur Ubuntu 22.04](https://www.linuxtechi.com/static-ip-address-on-ubuntu-server/)  
+[Documentation pour l'utilisation de la fonction php_uname](https://www.php.net/manual/en/function.php-uname.php)
