@@ -5,7 +5,7 @@
 
 - Évaluation : 25 % de la session (15 % pour le TP3 directement et 10 % pour L'EFCS)
 - Type de travail : individuel
-- Date de remise : 27 février 2023
+- Date de remise : 1 mars 2023
 - Durée : 10 heures, dont 2 séances (24 février et 27 février). 
 - Système d’exploitation : Linux Ubuntu / Docker
 - Environnement : Docker
@@ -65,6 +65,10 @@ Donc, on se connecte sur <code>www.efcs.com</code> qui appelle le proxy nginx qu
 Vous devez fournir (déposé sur LÉA) :
 
 - L'adresse de votre dépôt GitHub dans un fichier texte.
+- Des captures d'écran dans un docuement Word :  
+	- la page Web de vos deux serveurs;  
+	- votre commande pour lancer le projet;
+	- l'affichage final d'ansible indiquant les OKs et le nombre de changements.  
 
 Vous devez fournir (déposé sur GitHub) :
 
@@ -72,11 +76,6 @@ Vous devez fournir (déposé sur GitHub) :
   - Tous les fichiers de votre travail à l'exception de la vidéo.  
   - Je dois trouver l'adresse de votre vidéo dans le fichier readme.md de votre projet.  
 
-Votre vidéo :  
-
-- Une vidéo d'environ 8 min. (maximum 10 min.):  
-	- Explication de tous vos fichiers  
-	- Démonstration que le site fonctionne avec les deux serveurs
 
 ## Évaluation :
 |Item ||Points  |
