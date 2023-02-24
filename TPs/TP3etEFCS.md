@@ -65,7 +65,7 @@ Donc, on se connecte sur <code>www.efcs.com</code> qui appelle le proxy nginx qu
 Vous devez fournir (déposé sur LÉA) :
 
 - L'adresse de votre dépôt GitHub dans un fichier texte.
-- Des captures d'écran dans un docuement Word :  
+- Des captures d'écran dans un document Word :  
 	- la page Web de vos deux serveurs;  
 	- votre commande pour lancer le projet;
 	- l'affichage final d'ansible indiquant les OKs et le nombre de changements.  
