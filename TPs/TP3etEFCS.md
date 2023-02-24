@@ -73,8 +73,7 @@ Vous devez fournir (déposé sur LÉA) :
 Vous devez fournir (déposé sur GitHub) :
 
   - Un dépôt privé avec votre code source du TP3.  
-  - Tous les fichiers de votre travail à l'exception de la vidéo.  
-  - Je dois trouver l'adresse de votre vidéo dans le fichier readme.md de votre projet.  
+  - Tous les fichiers de votre travail.    
 
 
 ## Évaluation :
