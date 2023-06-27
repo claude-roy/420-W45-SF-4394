@@ -23,7 +23,7 @@ Le but de cette épreuve à caractère synthèse a pour objectifs :
 
 Nginx est utilisé comme équilibreur de charge pour avoir une structure comme celle-ci :
 
-![Infra](img/EFCS.jpg)
+![Infra](images/EFCS.jpg)
 
 
 **Attention :** même si sur l'image les deux serveurs php point vers un seul serveur MySQL, vous allez implanter 2 serveurs MySQL.
